@@ -25,13 +25,13 @@ def imprimir(sentencia):
 
 datosArboles = imprimir("SELECT * FROM datosArboles")
 
-dADataFrame = pd.DataFrame(datosArboles, columns=["id_arbol","nombre","nombreCientifico","tempMinima","tempMaxima",
-                                                  "humMinima","humMaxima","tempAmbiental","humAmbiental"])
+dADataFrame = pd.DataFrame(datosArboles, columns=["id_arbol","nombre","nombreCientifico",
+                                                  "humMinima","humMaxima","tempAmbientalMinima","humAmbientalMinima"])
 
 registrosArboles = imprimir("SELECT * FROM registrosArboles")
 
-rADataFrame = pd.DataFrame(registrosArboles, columns=["id_registro","nombre","nombreCientifico","temperatura",
-                                                      "humedad","temperaturaAmb","humedadAmb","fecha","buenaCondicion"])
+rADataFrame = pd.DataFrame(registrosArboles, columns=["id_registro","nombre","nombreCientifico","humedad",
+                                                      "temperaturaAmb","humedadAmb","fecha","buenaCondicion"])
 
 print(dADataFrame)
 print(rADataFrame)
