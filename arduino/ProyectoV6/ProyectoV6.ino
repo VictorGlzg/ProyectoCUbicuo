@@ -6,7 +6,7 @@
 // Definiciones y configuración
 const char* ssid = "Dormitorio";        // Nombre de la red WiFi
 const char* password = "Carlos0317";    // Contraseña de la red WiFi
-String serverUrl = "http://192.168.0.122:3000"; // URL del servidor
+String serverUrl = "http://192.168.0.113:3000/data"; // URL del servidor
 const int serverPort = 3000;             // Puerto del servidor
 const int numSensors = 1;                // Número de sensores (dejar solo 1)
 const int sensorPins[] = {33};           // Pines de los sensores (dejar solo el pin 33)
@@ -42,15 +42,22 @@ void setup() {
 
 void sendDataToServer(float h, float t, float hd) {
   // Crea la URL para enviar datos al servidor
-  String url = serverUrl + "/data?h=" + String(h) +
+  String url = serverUrl + "?h=" + String(h) +
                "&t=" + String(t) +
                "&hd=" + String(hd);
   HTTPClient http; // Instancia para realizar solicitudes HTTP
   http.begin(url); // Inicia la solicitud HTTP
-  if (http.GET() == HTTP_CODE_OK) {
+  http.addHeader("Content-Type", "application/json"); // Establece el encabezado como JSON
+  String payload = String("{\"h\":") + String(h) +
+                   String(",\"t\":") + String(t) +
+                   String(",\"hd\":") + String(hd) +
+                   String("}");
+  int httpResponseCode = http.POST(payload); // Realiza una solicitud POST con datos JSON
+  if (httpResponseCode == HTTP_CODE_OK) {
     Serial.println("Datos enviados al servidor con éxito.");
   } else {
-    Serial.println("Error al enviar datos al servidor.");
+    Serial.print("Error al enviar datos al servidor. Código de respuesta: ");
+    Serial.println(httpResponseCode);
   }
   http.end(); // Finaliza la solicitud HTTP
 }
@@ -115,28 +122,26 @@ void loop() {
   if (client) {
     if (client.available()) {
       String request = client.readStringUntil('\r');
-      if (request.indexOf("/solicitar-datos") != -1) {
-        // Procesa la solicitud de datos en tiempo real aquí
-        if (sensorsEnabled) {
-          // Activa los sensores, captura datos y responde con los datos
-          // Asegúrate de responder con el formato adecuado (por ejemplo, JSON).
-          String response = "{\"data1\": " + String(123) + ", \"data2\": " + String(456) + "}";
-          client.println("HTTP/1.1 200 OK");
-          client.println("Content-Type: application/json");
-          client.println("Connection: close");
-          client.println();
-          client.println(response);
-        } else {
-          // Los sensores están deshabilitados, responde con un mensaje adecuado.
-          client.println("HTTP/1.1 200 OK");
-          client.println("Content-Type: text/plain");
-          client.println("Connection: close");
-          client.println();
-          client.println("Sensores deshabilitados.");
-        }
-        delay(1);
-        client.stop();
+      if (request.indexOf("/solicitar-datos") != -1)
+      if (sensorsEnabled) {
+        // Activa los sensores, captura datos y responde con los datos
+        // Asegúrate de responder con el formato JSON adecuado.
+        String response = "{\"data1\": " + String(123) + ", \"data2\": " + String(456) + "}";
+        client.println("HTTP/1.1 200 OK");
+        client.println("Content-Type: application/json");
+        client.println("Connection: close");
+        client.println();
+        client.println(response);
+      } else {
+        // Los sensores están deshabilitados, responde con un mensaje adecuado.
+        client.println("HTTP/1.1 200 OK");
+        client.println("Content-Type: text/plain");
+        client.println("Connection: close");
+        client.println();
+        client.println("Sensores deshabilitados.");
       }
+      delay(1);
+      client.stop();
     }
   }
 }
