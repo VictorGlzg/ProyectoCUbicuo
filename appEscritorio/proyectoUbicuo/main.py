@@ -36,8 +36,8 @@ def update():
 #Obtener el ultimo registro no clasificados para clasificado.
 #ORDER BY id_registro DESC LIMIT 1
 registrosArboles = consulta("SELECT * FROM registrosArboles WHERE buenaCondicion IS NULL ORDER BY id_registro DESC LIMIT 1")
-#id_registro, nombre,nombreCientifico,humedad,temperaturaAmb,humedadAmb,fecha,buenaCondicion
-# 0             1           2            3          4            5        6        7
+#id_registro, id_arbol,humedad,temperaturaAmb,humedadAmb,fecha,hora,buenaCondicion
+# 0             1           2         3          4        5     6        7
 
 idTipoArbol = 1;
 # registrosArboles[0][0] obtener el id del arbol
@@ -49,9 +49,9 @@ humMaxima = datosArboles[0][4]
 
 def clasificar():
     id = arbol[0]
-    humedad = arbol[3]
-    temperaturaAmb = arbol[4]
-    humedadAmb = arbol[5]
+    humedad = arbol[2]
+    temperaturaAmb = arbol[3]
+    humedadAmb = arbol[4]
     if humedad < humMinima or humedad > humMaxima:
         print("El registro: " + str(arbol[0]) + " MALA CONDICION")
         condicion = 0
