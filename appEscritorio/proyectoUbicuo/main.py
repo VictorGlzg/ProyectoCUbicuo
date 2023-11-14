@@ -54,9 +54,11 @@ def clasificar():
     humedadAmb = arbol[4]
     if humedad < humMinima or humedad > humMaxima:
         print("El registro: " + str(arbol[0]) + " MALA CONDICION")
+        estado = "Mal estado"
         condicion = 0
     else:
         print("El registro: " + str(arbol[0]) + " BUENA CONDICION")
+        estado = "Buen estado"
         condicion = 1
     # Establecer condicion en BD
     mycursor.execute("UPDATE registrosArboles SET buenaCondicion=" + str(condicion) + " WHERE id_registro = " + str(id))
@@ -64,7 +66,7 @@ def clasificar():
     print(mycursor.rowcount, "record(s) affected")
 
     myobj = {'noti': 'Los datos censados actuales son: humedad:'+str(humedad)+'temperatura ambiental:'+str(temperaturaAmb)
-             +'humedad ambiental:'+str(humedadAmb)}
+             +'humedad ambiental:'+str(humedadAmb)+' el arbol se encuentra en: '+estado}
     requests.post(url, json=myobj)
     print(requests.get(url))
 
