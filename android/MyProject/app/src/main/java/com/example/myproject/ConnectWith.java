@@ -190,8 +190,8 @@ public class ConnectWith extends Activity {
                 // Lanzamos el Intent que mostrara la interfaz de activacion del
                 // Bluetooth. La respuesta de este Intent se manejara en el metodo
                 // onActivityResult
-                    Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                    startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
             }
         } else if (v.getId() == R.id.btnBuscarDispositivo) {
             if (arrayDevices != null)
@@ -321,6 +321,6 @@ public class ConnectWith extends Activity {
         public static final String BROADCAST_ACTION = "com.example.myproject.BROADCAST"; // Defines the key for the status "extra" in an
         public static final String TAG_STATUS = "com.example.myproject.STATUS";
     }
-
-
 }
+
+

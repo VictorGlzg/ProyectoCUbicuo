@@ -1,5 +1,6 @@
 package com.example.myproject.bluetooth;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,7 +13,6 @@ import java.util.List;
 
 public class BluetoothDeviceArrayAdapter extends ArrayAdapter
 {
-
     private List<BluetoothDevice> deviceList; // Contendra el listado de dispositivos
     private Context context;                    // Contexto activo
 
@@ -35,6 +35,7 @@ public class BluetoothDeviceArrayAdapter extends ArrayAdapter
             return 0;
     }
 
+    @SuppressLint("MissingPermission")
     @Override
     public View getView(int position, View convertView, ViewGroup parent)
     {
@@ -70,3 +71,4 @@ public class BluetoothDeviceArrayAdapter extends ArrayAdapter
         return elemento;
     }
 }
+

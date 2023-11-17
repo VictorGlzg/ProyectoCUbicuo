@@ -30,9 +30,9 @@ public class BluetoothAdmin {
         act.registerReceiver(bReceiver, filtro);
     }
 
-    public static void getPermissions(String[] permissions, Activity activity) {
-        if(Build.VERSION.SDK_INT>=23) {
-            Log.e("DATA", "API >= 23");
+    public static void  getPermissions(String[] permissions, Activity activity) {
+        if(Build.VERSION.SDK_INT>=25) {
+            Log.e("DATA", "API >= 25");
             ArrayList<String> preToDo = new ArrayList<>();
             boolean tip = false;
             for (String pre : permissions) {

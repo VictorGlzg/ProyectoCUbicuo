@@ -8,15 +8,9 @@ import android.bluetooth.BluetoothSocket;
 import android.os.Handler;
 import android.util.Log;
 
-import com.example.myproject.MiPeticionREST;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 
@@ -56,7 +50,6 @@ public class BluetoothService {
     }
 
 
-
     public void iniciarServidor(){
         (new HiloServidor()).start();
     }
@@ -73,7 +66,6 @@ public class BluetoothService {
         private final InputStream inputStream;    // Flujo de entrada (lecturas)
         private final OutputStream outputStream;   // Flujo de salida (escrituras)
         private int NEXT_ACCION;
-
 
         @SuppressLint("MissingPermission")
         public HiloConexion(BluetoothSocket socket, int next_action)
@@ -117,29 +109,24 @@ public class BluetoothService {
                     switch( this.NEXT_ACCION ){
                         case BluetoothService.MSG_LEER:
                             // Leemos del flujo de entrada del socket
-                            Log.e("HILO-CONEXION", "Leyendo");
                             bytes = inputStream.read(buffer);
-                            Log.e("HILO-CONEXION", "Leido");
                             // Enviamos la informacion a la actividad a traves del handler.
                             // El metodo handleMessage sera el encargado de recibir el mensaje
                             // y mostrar los datos recibidos en el TextView
-                            //handler.obtainMessage(MSG_LEER, bytes, -1, buffer).sendToTarget();
-
-                            this.make_post(buffer);
-
+                            handler.obtainMessage(MSG_LEER, bytes, -1, buffer).sendToTarget();
                             break;
 
                         case BluetoothService.MSG_ESCRIBIR:
-                            String saludo = "1";
+                            String saludo = "0";
                             byte[] out_buffer = saludo.getBytes();
                             bytes = out_buffer.length;
                             outputStream.write(out_buffer);
 
-                            //handler.obtainMessage(MSG_ESCRIBIR, bytes, -1, out_buffer).sendToTarget();
+                            handler.obtainMessage(MSG_ESCRIBIR, bytes, -1, out_buffer).sendToTarget();
                             break;
                     }
 
-                    this.NEXT_ACCION = MSG_LEER;
+                    this.NEXT_ACCION = MSG_NINGUNO;
 
                 }
                 catch(IOException e) {
@@ -147,36 +134,6 @@ public class BluetoothService {
                 } /*catch (InterruptedException e) {
                     e.printStackTrace();
                 }*/
-            }
-        }
-
-        public void make_post(byte []buffer){
-            try
-            {
-                URL url = new URL("https://a9de-201-162-246-162.ngrok.io/users1");
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setDoOutput(true);
-                conn.setRequestMethod("POST");
-                conn.setRequestProperty("Content-Type", "application/json");
-
-                String input = "{\"id\": \"0\",\"dato\": \"" + "1" + "\",\"segundo\": \"" + "2\"" + "}";
-                OutputStream os = conn.getOutputStream();
-                os.write(input.getBytes());
-                os.flush();
-
-                if (conn.getResponseCode() != HttpURLConnection.HTTP_CREATED) {
-                }
-
-                conn.disconnect();
-
-            }
-            catch (MalformedURLException e) {
-                Log.e("ENVIOREST", "[MalformedURLException]=>" + e.getMessage());
-                e.printStackTrace();
-
-            } catch (IOException e) {
-                Log.e("ENVIOREST", "[IOException]=>" + e.getMessage());
-                e.printStackTrace();
             }
         }
 

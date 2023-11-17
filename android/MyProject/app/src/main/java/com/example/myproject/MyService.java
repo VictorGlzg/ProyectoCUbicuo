@@ -21,10 +21,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /* REFERENCES
-    * url: Service vs IntentService https://www.geeksforgeeks.org/difference-between-service-and-intentservice-in-android/
-    * URL: Using Service: https://www.geeksforgeeks.org/services-in-android-with-example/
-    *
-    * java.lang.IllegalAccessException : la causa es un constructor que no se puede invocar (el del IntentService) asegurate que sea declarado "public"
+ * url: Service vs IntentService https://www.geeksforgeeks.org/difference-between-service-and-intentservice-in-android/
+ * URL: Using Service: https://www.geeksforgeeks.org/services-in-android-with-example/
+ *
+ * java.lang.IllegalAccessException : la causa es un constructor que no se puede invocar (el del IntentService) asegurate que sea declarado "public"
  */
 public class MyService extends IntentService {
     MyReceiver myReceiver = null;
@@ -48,7 +48,7 @@ public class MyService extends IntentService {
     private void send(String info) {
         try {
             //Tiene como objetivo hacer que el BOT envíe un mensaje al chat con ID definido
-            URL url = new URL("https://api.telegram.org/bot6953803560:AAGu3MdXksIWSYNbkDXYWGZWTNW2o3qISz0/sendMessage?chat_id=6106687513&text=" + info);
+            URL url = new URL("https://api.telegram.org/bot6953803560:AAGu3MdXksIWSYNbkDXYWGZWTNW2o3qISz0/sendMessage?chat_id=6953803560&text=" + info);
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(true);
@@ -214,4 +214,4 @@ public class MyService extends IntentService {
             }
         }
     };
-} 
+}
