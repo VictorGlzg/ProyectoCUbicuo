@@ -1,19 +1,23 @@
 import mysql.connector
 import json
 import requests
+import time
 
 # https://www.w3schools.com/python/python_mysql_select.asp
 conn = mysql.connector.connect(host='sql3.freesqldatabase.com', password='ZzRpEBZpe8', user='sql3657983', database='sql3657983')
 mycursor = conn.cursor()
 
 # PETICION POST AL SERVIDOR
-url = 'https://spicy-views-repair.loca.lt/escritorio'
+url = 'http://3834-187-254-100-32.ngrok-free.app/escritorio'
 
 #Confirmar la conexion con mysql
 if conn.is_connected():
     print("Connection established..")
 
 def consulta(sentencia):
+    conn = mysql.connector.connect(host='sql3.freesqldatabase.com', password='ZzRpEBZpe8', user='sql3657983',
+                                   database='sql3657983')
+    mycursor = conn.cursor()
     mycursor.execute(sentencia)
     myresult = mycursor.fetchall()
     return myresult
@@ -51,8 +55,7 @@ def clasificar():
     print(mycursor.rowcount, "record(s) affected")
 
     myobj = {'noti': 'Los datos censados actuales son: humedad:' + str(humedad) + 'temperatura ambiental:' + str(
-        temperaturaAmb)
-                     + 'humedad ambiental:' + str(humedadAmb) + ' el arbol se encuentra en: ' + estado}
+        temperaturaAmb)+ 'humedad ambiental:' + str(humedadAmb) + ' el arbol se encuentra en: ' + estado}
     requests.post(url, json=myobj)
     print(requests.get(url))
 
@@ -62,8 +65,9 @@ def clasificar():
 
 while(True):
     r = requests.get(url)
-    if(r != None):
-        print("Consulta")
+    if(r.status_code == 200):
+        print("Consulta: "+str(r.status_code))
+
         # Obtener el ultimo registro no clasificados para clasificado.
         # ORDER BY id_registro DESC LIMIT 1
         registrosArboles = consulta("SELECT * FROM registrosArboles WHERE buenaCondicion IS NULL ORDER BY id_registro DESC LIMIT 1")
@@ -81,4 +85,5 @@ while(True):
         # CLASIFICACION DE ACUERDO A HUMBRAL DE HUMEDAD
         for arbol in registrosArboles:
             clasificar()
-        r = None
+    r = None
+    time.sleep(50)

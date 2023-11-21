@@ -35,11 +35,18 @@ create table registrosArboles
 
 -- drop table registrosArboles;
 
+create table imgs(
+	id_img int auto_increment primary key,
+	img BLOB
+);
+
 insert into registrosArboles (id_arbol,humedad,temperaturaAmb,humedadAmb,fecha,hora,buenaCondicion) values
 (1,65,24,77,"2023-10-29","00:00:00",true);
 
+-- drop table registrosArboles;
 select * from registrosArboles;
 insert into registrosArboles (id_arbol,humedad,temperaturaAmb,humedadAmb,fecha,hora,buenaCondicion) values
 (1,65,24,77,"2023-10-29","00:00:00",null);
+
 UPDATE registrosArboles SET buenaCondicion=0 WHERE id_registro = 3;
--- delete from registrosArboles WHERE humedad IS NULL;
+delete from registrosArboles WHERE humedad IS NULL;
