@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "cors": "^2.8.5",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.6.3",
+    "python-shell": "^5.0.0"
+  }
+}
