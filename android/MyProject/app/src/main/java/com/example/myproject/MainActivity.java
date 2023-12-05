@@ -1,19 +1,18 @@
 package com.example.myproject;
 
 import android.app.Activity;
-import android.app.IntentService;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class MainActivity extends Activity {
     EditText etMessage;
@@ -27,8 +26,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        etMessage = (EditText) findViewById(R.id.etMessage);
-        tvResponse = (TextView) findViewById(R.id.tvResponse);
+        //etMessage = (EditText) findViewById(R.id.etMessage);
+        //tvResponse = (TextView) findViewById(R.id.tvResponse);
     }
 
     public void onSend(View v){
@@ -57,7 +56,6 @@ public class MainActivity extends Activity {
     }
 
     public void onJSON(View v) {
-        //por que aqui
         if( data == null ) {
             data = this.tvResponse.getText().toString();
             this.parser = new MyJSONParser(data);
@@ -94,9 +92,15 @@ public class MainActivity extends Activity {
 
     public void onService(View v) {
         Intent demon = new Intent(this, MyService.class);
-
         startService(demon);
-
+        Intent intent = new Intent(this, MyWebService.class);
+        startService(intent);
         finish();
+    }
+
+    public void onServer(View v) {
+        //new ConnectToServerTask().execute();
+        //Intent intent = new Intent(this, MyWebService.class);
+        //startService(intent);
     }
 }

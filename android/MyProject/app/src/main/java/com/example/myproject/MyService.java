@@ -48,7 +48,7 @@ public class MyService extends IntentService {
     private void send(String info) {
         try {
             //Tiene como objetivo hacer que el BOT envíe un mensaje al chat con ID definido
-            URL url = new URL("https://api.telegram.org/bot6953803560:AAGu3MdXksIWSYNbkDXYWGZWTNW2o3qISz0/sendMessage?chat_id=6953803560&text=" + info);
+            URL url = new URL("https://api.telegram.org/bot6953803560:AAF-ejNSd4tqqVo4LjSleTYvrWqkN__8e2U/sendMessage?chat_id=6953803560&text=" + info);
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(true);
@@ -79,7 +79,7 @@ public class MyService extends IntentService {
     private MyData get_updates() {
         MyData data = null;
         try {
-            String my_url = "https://api.telegram.org/bot6953803560:AAGu3MdXksIWSYNbkDXYWGZWTNW2o3qISz0/getUpdates?offset=" + offset + "&timeout=5";
+            String my_url = "https://api.telegram.org/bot6953803560:AAF-ejNSd4tqqVo4LjSleTYvrWqkN__8e2U/getUpdates?offset=" + offset + "&timeout=5";
             URL url = new URL(my_url);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(true);

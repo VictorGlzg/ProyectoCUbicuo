@@ -7,44 +7,44 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <EditText
+    <!-- <EditText
         android:id="@+id/etMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="40dp"
-        />
+        /> -->
 
-    <Button
+    <!-- <Button
         android:id="@+id/btSend"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="SEND"
         android:onClick="onSend"
-        />
+        /> -->
 
-    <Button
+    <!-- <Button
         android:id="@+id/btUpdate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="UPDATE"
         android:onClick="onUpdate"
-        />
+        /> -->
 
-    <Button
+    <!-- <Button
         android:id="@+id/btPost"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="POST"
         android:onClick="onPost"
-        />
+        /> -->
 
-    <Button
+    <!-- <Button
         android:id="@+id/btParser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text=">> JSON"
         android:onClick="onJSON"
-        />
+        /> -->
 
     <Button
         android:id="@+id/btService"
@@ -54,10 +54,18 @@
         android:onClick="onService"
         />
 
-    <TextView
+    <Button
+        android:id="@+id/btServer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Init Server"
+        android:onClick="onServer"
+        />
+
+    <!-- <TextView
         android:id="@+id/tvResponse"
         android:text="Response"
         android:textSize="40dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content" /> -->
 </LinearLayout>
