@@ -2,8 +2,6 @@ package com.example.myproject;
 
 import android.app.IntentService;
 import android.bluetooth.BluetoothAdapter;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
@@ -20,6 +18,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+
+
 /* REFERENCES
  * url: Service vs IntentService https://www.geeksforgeeks.org/difference-between-service-and-intentservice-in-android/
  * URL: Using Service: https://www.geeksforgeeks.org/services-in-android-with-example/
@@ -32,13 +32,12 @@ public class MyService extends IntentService {
     int offset = 989527494;
     String res;
 
-    public MyService(){
+    public MyService() {
         super("MyService");
     }
     @Override
     protected void onHandleIntent(Intent workIntent) {
         MyData data = null;
-
         do {
             data = this.get_updates();
             Log.i("PRUEBA DO WHILE","EN CICLO");
@@ -48,7 +47,7 @@ public class MyService extends IntentService {
     private void send(String info) {
         try {
             //Tiene como objetivo hacer que el BOT envíe un mensaje al chat con ID definido
-            URL url = new URL("https://api.telegram.org/bot6953803560:AAF-ejNSd4tqqVo4LjSleTYvrWqkN__8e2U/sendMessage?chat_id=6953803560&text=" + info);
+            URL url = new URL("https://api.telegram.org/bot6800975183:AAHalCaQ9weXmKX_i6i9_r6ZqReoQlygCoc/sendMessage?chat_id=-4055829170&text=" + info);
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(true);
@@ -79,7 +78,7 @@ public class MyService extends IntentService {
     private MyData get_updates() {
         MyData data = null;
         try {
-            String my_url = "https://api.telegram.org/bot6953803560:AAF-ejNSd4tqqVo4LjSleTYvrWqkN__8e2U/getUpdates?offset=" + offset + "&timeout=5";
+            String my_url = "https://api.telegram.org/bot6800975183:AAHalCaQ9weXmKX_i6i9_r6ZqReoQlygCoc/getUpdates?offset=" + offset + "&timeout=5";
             URL url = new URL(my_url);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(true);
@@ -147,6 +146,13 @@ public class MyService extends IntentService {
 
                 this.send("Sensor Encendido " + this.offset);
             }
+
+            if (msg.contains("Checar")) {
+                // Enviar una señal a MainActivity para ejecutar el método actualizarEditTextRunnable
+                Intent broadcastIntent = new Intent("com.example.myproject.RUN_RUNNABLE_ACTION");
+                sendBroadcast(broadcastIntent);
+            }
+
 
             if( msg.contains("APAGAR") ) {
                 //Solicitud de apagado

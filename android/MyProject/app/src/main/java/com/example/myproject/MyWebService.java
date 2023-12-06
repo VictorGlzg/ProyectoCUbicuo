@@ -16,7 +16,7 @@ import java.net.URL;
 
 public class MyWebService extends Service {
     private static final String TAG = "MyWebService";
-    private static final String URL_SERVIDOR = "http://3f4b-187-254-100-32.ngrok-free.app/android";
+    private static final String URL_SERVIDOR = "https://jsonplaceholder.typicode.com/todos/1";
     private static final int INTERVALO_CONEXION = 30000; // Intervalo en milisegundos (1 minuto)
     private boolean conectado = false;
     private ConnectionTask connectionTask;
@@ -158,6 +158,8 @@ public class MyWebService extends Service {
                         Log.e(TAG, "Error al enviar datos a Telegram. Código de respuesta: " + responseCode);
                     }
                 }
+
+
                 // Cerrar la conexión
                 urlConnection.disconnect();
             } catch (IOException e) {
@@ -170,12 +172,33 @@ public class MyWebService extends Service {
         protected void onPostExecute(String result) {
             // Procesar el resultado de la conexión aquí
             if (result != null) {
-                Log.d(TAG, "Respuesta del servidor: " + result);
+                if (result != null) {
+                    Log.d(TAG, "Respuesta del servidor: " + result);
+
+                    // Aquí puedes llamar a un método para enviar los datos a la API de Telegram
+                    TelegramTask telegramTask = new TelegramTask();
+                    telegramTask.execute(result);
+
+                    // Envía el resultado a MainActivity
+                    enviarBroadcast(result);
+                } else {
+                    // Si result es nulo, asigna el texto "procesando" al EditText
+                    enviarBroadcast("procesando");
+                }
 
                 // Aquí puedes llamar a un método para enviar los datos a la API de Telegram
-                TelegramTask telegramTask = new TelegramTask();
-                telegramTask.execute(result);
+                //TelegramTask telegramTask = new TelegramTask();
+                //telegramTask.execute(result);
+
+                // Envía el resultado a MainActivity
+                enviarBroadcast(result);
             }
+        }
+
+        private void enviarBroadcast(String result) {
+            Intent intent = new Intent("ACTUALIZAR_EDITTEXT_ACTION");
+            intent.putExtra("RESULTADO", result);
+            sendBroadcast(intent);
         }
 
 

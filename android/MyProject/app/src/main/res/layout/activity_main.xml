@@ -7,45 +7,6 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <!-- <EditText
-        android:id="@+id/etMessage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="40dp"
-        /> -->
-
-    <!-- <Button
-        android:id="@+id/btSend"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="SEND"
-        android:onClick="onSend"
-        /> -->
-
-    <!-- <Button
-        android:id="@+id/btUpdate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="UPDATE"
-        android:onClick="onUpdate"
-        /> -->
-
-    <!-- <Button
-        android:id="@+id/btPost"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="POST"
-        android:onClick="onPost"
-        /> -->
-
-    <!-- <Button
-        android:id="@+id/btParser"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text=">> JSON"
-        android:onClick="onJSON"
-        /> -->
-
     <Button
         android:id="@+id/btService"
         android:layout_width="match_parent"
@@ -54,18 +15,9 @@
         android:onClick="onService"
         />
 
-    <Button
-        android:id="@+id/btServer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Init Server"
-        android:onClick="onServer"
-        />
+    <EditText android:id="@+id/etMessage" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="40dp"/>
+    <Button android:id="@+id/btSend" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="SEND"/>
+    <Button android:id="@+id/btUpdate" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="UPDATE"/>
+    <TextView android:id="@+id/tvResponse" android:text="Response" android:textSize="40dp" android:layout_width="match_parent" android:layout_height="wrap_content"/>
 
-    <!-- <TextView
-        android:id="@+id/tvResponse"
-        android:text="Response"
-        android:textSize="40dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" /> -->
 </LinearLayout>

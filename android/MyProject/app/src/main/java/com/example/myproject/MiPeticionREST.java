@@ -4,8 +4,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.TextView;
 
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -13,8 +11,6 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-
-import java.nio.charset.StandardCharsets;
 
 public class MiPeticionREST extends AsyncTask<String,String,String> {
     private TextView output;
@@ -46,7 +42,7 @@ public class MiPeticionREST extends AsyncTask<String,String,String> {
         {
 
             if( info[0].contains("POST")) {
-                URL url = new URL(" https://c705-201-166-190-8.ngrok-free.app:3000/users1");
+                URL url = new URL("https://api.telegram.org/bot6800975183:AAHalCaQ9weXmKX_i6i9_r6ZqReoQlygCoc/sendMessage?text=Hola");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setDoOutput(true);
                 conn.setRequestMethod("POST");
@@ -66,7 +62,7 @@ public class MiPeticionREST extends AsyncTask<String,String,String> {
 
             if( info[0].contains("GET-SEND")){
                 //Tiene como objetivo hacer que el BOT envíe un mensaje al chat con ID definido
-                URL url = new URL("https://api.telegram.org/bot6953803560:AAF-ejNSd4tqqVo4LjSleTYvrWqkN__8e2U/sendMessage?chat_id=6953803560&text=" + info[1]);
+                URL url = new URL("https://api.telegram.org/bot6800975183:AAHalCaQ9weXmKX_i6i9_r6ZqReoQlygCoc/sendMessage?chat_id=-4055829170&text=" + info[1]);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setDoOutput(true);
                 conn.setRequestMethod("GET");
@@ -87,7 +83,7 @@ public class MiPeticionREST extends AsyncTask<String,String,String> {
             }
 
             if( info[0].contains("GET-UPDATES")){
-                URL url = new URL("https://api.telegram.org/bot6953803560:AAF-ejNSd4tqqVo4LjSleTYvrWqkN__8e2U/getUpdates?offset=" + offset + "timeout=5");
+                URL url = new URL("https://api.telegram.org/bot6800975183:AAHalCaQ9weXmKX_i6i9_r6ZqReoQlygCoc/getUpdates?offset=" + offset + "timeout=5");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setDoOutput(true);
                 conn.setRequestMethod("GET");

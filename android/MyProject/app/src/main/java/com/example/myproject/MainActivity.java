@@ -1,93 +1,80 @@
 package com.example.myproject;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 public class MainActivity extends Activity {
     EditText etMessage;
+    String result = "procesando"; // Valor predeterminado
+    Handler handler;
     TextView tvResponse;
 
-    String data = null;
-    MyJSONParser parser = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        etMessage = (EditText) findViewById(R.id.etMessage);
+        tvResponse = (TextView) findViewById(R.id.tvResponse);
 
-        //etMessage = (EditText) findViewById(R.id.etMessage);
-        //tvResponse = (TextView) findViewById(R.id.tvResponse);
-    }
-
-    public void onSend(View v){
-        MiPeticionREST obj = new MiPeticionREST(tvResponse);
-
-        obj.execute("GET-SEND", etMessage.getText().toString());
-
-    }
-
-    public void onUpdate(View v){
-        MiPeticionREST obj = new MiPeticionREST(tvResponse);
-
-        obj.execute("GET-UPDATES");
-
-        //Por que aquí no puede ir
-        //data = this.tvResponse.getText().toString();
-
-        //this.parser = new MyJSONParser(data);
-
-    }
-
-    public void onPost(View v){
-        MiPeticionREST obj = new MiPeticionREST(tvResponse);
-
-        obj.execute("POST", "A", "B", "C");
-    }
-
-    public void onJSON(View v) {
-        if( data == null ) {
-            data = this.tvResponse.getText().toString();
-            this.parser = new MyJSONParser(data);
-        }
-
-        String msg = "";
-        MyData data = this.parser.getValue();
-        for (String i : data.msg) {
-            msg = msg + " " + i;
-
-            //interpretar cada mensaje
-            if( msg.contains("ENCENDER") ){
-                //Solicitud de encendido
-
-                //responder apropiadamente al usuario cada mensaje
-                MiPeticionREST obj = new MiPeticionREST(tvResponse);
-                obj.execute("GET-SEND", "Sensor Encendido");
+        IntentFilter intentFilter2 = new IntentFilter("com.example.myproject.RUN_RUNNABLE_ACTION");
+        BroadcastReceiver runRunnableReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                // Ejecutar el método actualizarEditTextRunnable cuando se recibe la señal
+                handler.post(actualizarEditTextRunnable);
             }
+        };
+        registerReceiver(runRunnableReceiver, intentFilter2);
 
-            if( msg.contains("APAGAR") ) {
-                //Solicitud de apagado
-
-                //responder apropiadamente al usuario cada mensaje
-                MiPeticionREST obj = new MiPeticionREST(tvResponse);
-                obj.execute("GET-SEND", "Sensor Apagado");
+        IntentFilter intentFilter = new IntentFilter("ACTUALIZAR_EDITTEXT_ACTION");
+        BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String resultado = intent.getStringExtra("RESULTADO");
+                // Actualizar el EditText con el resultado
+                etMessage.setText(resultado);
+                // Actualizar la variable result
+                result = resultado;
             }
-        }
+        };
 
-        //Interpretar y actuar
+        registerReceiver(broadcastReceiver, intentFilter);
 
 
-        //Toast.makeText(this, "" + msg, Toast.LENGTH_SHORT).show();
+
+
+        // Iniciar el temporizador para actualizar cada 30 segundos
+        handler = new Handler();
+        handler.postDelayed(actualizarEditTextRunnable, 30000);
+
+        Button send = (Button) findViewById(R.id.btSend);
+        send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //MiPeticionREST peticion = new MiPeticionREST(tvResponse);
+                //peticion.execute("GET-SEND",etMessage.getText().toString());
+            }
+        });
+
+        Button update = (Button) findViewById(R.id.btUpdate);
+        update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //MiPeticionREST peticion = new MiPeticionREST(tvResponse);
+                //peticion.execute("GET-UPDATES");
+            }
+        });
     }
 
     public void onService(View v) {
@@ -95,12 +82,35 @@ public class MainActivity extends Activity {
         startService(demon);
         Intent intent = new Intent(this, MyWebService.class);
         startService(intent);
-        finish();
+
+        //finish();
     }
 
     public void onServer(View v) {
-        //new ConnectToServerTask().execute();
-        //Intent intent = new Intent(this, MyWebService.class);
-        //startService(intent);
+        //MiPeticionREST peticion = new MiPeticionREST(tvResponse);
+        //peticion.execute("GET-SEND",etMessage.getText().toString());
+    }
+
+    private Runnable actualizarEditTextRunnable = new Runnable() {
+        @Override
+        public void run() {
+            // Actualizar el EditText con la información de la variable result
+            etMessage.setText(result);
+            // Ejecutar la petición GET-SEND cada vez que se actualiza el EditText
+            MiPeticionREST peticion = new MiPeticionREST(tvResponse);
+            peticion.execute("GET-SEND",etMessage.getText().toString());
+
+            // Programar la próxima ejecución después de 30 segundos
+            handler.postDelayed(this, 30000);
+        }
+    };
+
+
+
+    protected void onDestroy() {
+        super.onDestroy();
+        // Detener el temporizador cuando se destruye la actividad
+        handler.removeCallbacks(actualizarEditTextRunnable);
+
     }
 }
