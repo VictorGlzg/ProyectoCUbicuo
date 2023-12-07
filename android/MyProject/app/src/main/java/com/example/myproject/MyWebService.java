@@ -3,10 +3,12 @@ package com.example.myproject;
 import android.app.Service;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
-import android.os.Handler;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,8 +18,8 @@ import java.net.URL;
 
 public class MyWebService extends Service {
     private static final String TAG = "MyWebService";
-    private static final String URL_SERVIDOR = "https://jsonplaceholder.typicode.com/todos/1";
-    private static final int INTERVALO_CONEXION = 30000; // Intervalo en milisegundos (1 minuto)
+    private static final String URL_SERVIDOR = "http://a1ef-187-254-100-32.ngrok-free.app/android";
+    private static final int INTERVALO_CONEXION = 60000; // Intervalo en milisegundos (1 minuto)
     private boolean conectado = false;
     private ConnectionTask connectionTask;
     private Handler handler;
@@ -105,68 +107,6 @@ public class MyWebService extends Service {
             return resultado;
         }
 
-        private class TelegramTask extends AsyncTask<String, Void, Void> {
-
-            @Override
-            protected Void doInBackground(String... params) {
-                enviarDatosATelegram(params[0]);
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void result) {
-                // Puedes realizar alguna acción después de completar la operación en segundo plano
-            }
-        }
-
-        private void enviarDatosATelegram(String data) {
-            try {
-                // Construir la URL de la API de Telegram para enviar un mensaje
-                String telegramApiUrl = "https://api.telegram.org/bot6953803560:AAF-ejNSd4tqqVo4LjSleTYvrWqkN__8e2U/sendMessage";
-                URL url = new URL(telegramApiUrl);
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-
-                // Configuraciones de la conexión para enviar un mensaje a un chat específico
-                urlConnection.setRequestMethod("POST");
-                urlConnection.setDoOutput(true);
-
-                // Crear los parámetros del mensaje
-                String messageParams = "chat_id=6953803560&text=" + data;
-
-                // Escribir los parámetros en el cuerpo de la solicitud
-                urlConnection.getOutputStream().write(messageParams.getBytes());
-
-                // Verificar si la conexión fue exitosa (código de respuesta HTTP 200)
-                int responseCode = urlConnection.getResponseCode();
-                if (responseCode == HttpURLConnection.HTTP_OK) {
-                    // Obtener la respuesta del servidor de Telegram (puedes procesarla si es necesario)
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-                    StringBuilder response = new StringBuilder();
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        response.append(line);
-                    }
-                    reader.close();
-
-                    // Imprimir la respuesta del servidor de Telegram
-                    Log.d(TAG, "Respuesta del servidor de Telegram: " + response.toString());
-                } else {
-                    // Imprimir un mensaje de error si la conexión no fue exitosa
-                    if (responseCode == HttpURLConnection.HTTP_FORBIDDEN) {
-                        Log.e(TAG, "Error al enviar datos a Telegram. Permiso denegado (HTTP 403)");
-                    } else {
-                        Log.e(TAG, "Error al enviar datos a Telegram. Código de respuesta: " + responseCode);
-                    }
-                }
-
-
-                // Cerrar la conexión
-                urlConnection.disconnect();
-            } catch (IOException e) {
-                Log.e(TAG, "Error al enviar datos a Telegram: " + e.getMessage());
-            }
-        }
-
 
         @Override
         protected void onPostExecute(String result) {
@@ -174,10 +114,12 @@ public class MyWebService extends Service {
             if (result != null) {
                 if (result != null) {
                     Log.d(TAG, "Respuesta del servidor: " + result);
-
-                    // Aquí puedes llamar a un método para enviar los datos a la API de Telegram
-                    TelegramTask telegramTask = new TelegramTask();
-                    telegramTask.execute(result);
+                    // Convierte el JSON a una cadena (String)
+                    //String jsonString = convertirJSONaString(result);
+                    //result = jsonString;
+                    // Elimina las llaves y comillas del JSON
+                    //result = result.replace("{", "").replace("}", "").replace("\"", "").replace(",", " , ").replace(",", ",\n");
+                    //Log.d(TAG, "JSON convertido a String: " + result);
 
                     // Envía el resultado a MainActivity
                     enviarBroadcast(result);
@@ -192,6 +134,19 @@ public class MyWebService extends Service {
 
                 // Envía el resultado a MainActivity
                 enviarBroadcast(result);
+            }
+        }
+
+        private String convertirJSONaString(String json) {
+            try {
+                // Utiliza Gson para convertir el JSON a una cadena
+                Gson gson = new Gson();
+                JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
+                return jsonObject.toString();
+            } catch (Exception e) {
+                // Maneja cualquier excepción que pueda ocurrir durante la conversión
+                e.printStackTrace();
+                return null;
             }
         }
 
