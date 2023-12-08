@@ -3,7 +3,7 @@ const url = require('url');
 const mysql = require('mysql2');
 
 // Configuración del servidor
-const hostname = '192.168.0.122'; // Escucha en la dirección IP local
+const hostname = 'localhost'; // Escucha en la dirección IP local
 const port = 3000; // Puerto en el que escuchará el servidor
 
 // Configuración de la base de datos

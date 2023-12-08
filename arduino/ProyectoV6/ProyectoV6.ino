@@ -1,28 +1,23 @@
 #include <DHT.h>
 #include <HTTPClient.h>
 #include <WiFi.h>
-#include <WiFiServer.h>
 
 // Definiciones y configuración
-const char* ssid = "Dormitorio";        // Nombre de la red WiFi
-const char* password = "Carlos0317";    // Contraseña de la red WiFi
-String serverUrl = "http://192.168.0.113:3000/data"; // URL del servidor
-const int serverPort = 3000;             // Puerto del servidor
-const int numSensors = 1;                // Número de sensores (dejar solo 1)
-const int sensorPins[] = {33};           // Pines de los sensores (dejar solo el pin 33)
-#define DHTPIN 27                        // Pin del sensor DHT11
-#define DHTTYPE DHT11                    // Tipo de sensor DHT11
-DHT dht(DHTPIN, DHTTYPE);                 // Instancia del sensor DHT11
-bool sensorsEnabled = true;              // Estado de los sensores
-const int pinControl = 13;               // Pin que controla la alimentación de los sensores
+const char* ssid = "Pruebas";        // Nombre de la red WiFi
+const char* password = "Carlos0317"; // Contraseña de la red WiFi
+String serverUrl = "http://74f6-187-254-100-32.ngrok-free.app/arduino"; // URL del servidor
+const int numSensors = 1;            // Número de sensores (dejar solo 1)
+const int sensorPins[] = {33};       // Pines de los sensores (dejar solo el pin 33)
+#define DHTPIN 27                    // Pin del sensor DHT11
+#define DHTTYPE DHT11                // Tipo de sensor DHT11
+DHT dht(DHTPIN, DHTTYPE);             // Instancia del sensor DHT11
+bool sensorsEnabled = true;          // Estado de los sensores
+const int pinControl = 13;           // Pin que controla la alimentación de los sensores
 
 // Variables para el control del tiempo
 unsigned long previousMillis = 0;
-const long interval = 60000;  // Intervalo de un minuto en milisegundos
+const long interval = 180000;  // Cambiar a 10000 milisegundos (10 segundos)
 bool immediateSend = false;  // Bandera para enviar de forma inmediata
-
-// Servidor web para escuchar solicitudes
-WiFiServer server(80);
 
 #define RX_PIN 16 // Pin RX
 #define TX_PIN 17 // Pin TX
@@ -33,9 +28,6 @@ void setup() {
   WiFi.begin(ssid, password); // Conéctate a la red WiFi
   while (WiFi.status() != WL_CONNECTED) delay(1000); // Espera a que la conexión WiFi se establezca
   dht.begin(); // Inicializa el sensor DHT11
-  
-  // Inicializa el servidor web en el puerto 80
-  server.begin();
   pinMode(pinControl, OUTPUT); // Configura el pin de control como salida
   digitalWrite(pinControl, LOW); // Asegura que el pin 13 esté desactivado al inicio
 }
@@ -96,7 +88,6 @@ void loop() {
   }
   
   if (sensorsEnabled && (currentMillis - previousMillis >= interval || immediateSend)) {
-    // Ha pasado un minuto o se debe enviar de forma inmediata
     digitalWrite(pinControl, HIGH); // Activa el pin 13
     delay(2000); // Espera 2 segundos
 
@@ -116,32 +107,5 @@ void loop() {
     previousMillis = currentMillis;
     immediateSend = false;
   }
-
-  // Maneja solicitudes entrantes en el servidor web
-  WiFiClient client = server.available();
-  if (client) {
-    if (client.available()) {
-      String request = client.readStringUntil('\r');
-      if (request.indexOf("/solicitar-datos") != -1)
-      if (sensorsEnabled) {
-        // Activa los sensores, captura datos y responde con los datos
-        // Asegúrate de responder con el formato JSON adecuado.
-        String response = "{\"data1\": " + String(123) + ", \"data2\": " + String(456) + "}";
-        client.println("HTTP/1.1 200 OK");
-        client.println("Content-Type: application/json");
-        client.println("Connection: close");
-        client.println();
-        client.println(response);
-      } else {
-        // Los sensores están deshabilitados, responde con un mensaje adecuado.
-        client.println("HTTP/1.1 200 OK");
-        client.println("Content-Type: text/plain");
-        client.println("Connection: close");
-        client.println();
-        client.println("Sensores deshabilitados.");
-      }
-      delay(1);
-      client.stop();
-    }
-  }
 }
+
