@@ -7,8 +7,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -18,14 +18,16 @@ public class MainActivity extends Activity {
     Handler handler;
     TextView tvResponse;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         etMessage = (EditText) findViewById(R.id.etMessage);
         tvResponse = (TextView) findViewById(R.id.tvResponse);
+
+        etMessage.setFocusable(false);
+        etMessage.setClickable(false);
+        etMessage.setCursorVisible(false);
 
         IntentFilter intentFilter2 = new IntentFilter("com.example.myproject.RUN_RUNNABLE_ACTION");
         BroadcastReceiver runRunnableReceiver = new BroadcastReceiver() {
@@ -51,30 +53,10 @@ public class MainActivity extends Activity {
 
         registerReceiver(broadcastReceiver, intentFilter);
 
-
-
-
         // Iniciar el temporizador para actualizar cada 30 segundos
         handler = new Handler();
-        handler.postDelayed(actualizarEditTextRunnable, 30000);
+        handler.postDelayed(actualizarEditTextRunnable, 60000);
 
-        Button send = (Button) findViewById(R.id.btSend);
-        send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //MiPeticionREST peticion = new MiPeticionREST(tvResponse);
-                //peticion.execute("GET-SEND",etMessage.getText().toString());
-            }
-        });
-
-        Button update = (Button) findViewById(R.id.btUpdate);
-        update.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //MiPeticionREST peticion = new MiPeticionREST(tvResponse);
-                //peticion.execute("GET-UPDATES");
-            }
-        });
     }
 
     public void onService(View v) {
@@ -86,10 +68,6 @@ public class MainActivity extends Activity {
         //finish();
     }
 
-    public void onServer(View v) {
-        //MiPeticionREST peticion = new MiPeticionREST(tvResponse);
-        //peticion.execute("GET-SEND",etMessage.getText().toString());
-    }
 
     private Runnable actualizarEditTextRunnable = new Runnable() {
         @Override
@@ -99,7 +77,7 @@ public class MainActivity extends Activity {
             // Ejecutar la petición GET-SEND cada vez que se actualiza el EditText
             MiPeticionREST peticion = new MiPeticionREST(tvResponse);
             peticion.execute("GET-SEND",etMessage.getText().toString());
-
+            Log.d("EnvioTelegram", "La información se envió a Telegram");
             // Programar la próxima ejecución después de 30 segundos
             handler.postDelayed(this, 30000);
         }

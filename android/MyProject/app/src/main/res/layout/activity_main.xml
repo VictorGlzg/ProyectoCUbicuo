@@ -7,6 +7,8 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+
+
     <Button
         android:id="@+id/btService"
         android:layout_width="match_parent"
@@ -16,8 +18,6 @@
         />
 
     <EditText android:id="@+id/etMessage" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="40dp"/>
-    <Button android:id="@+id/btSend" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="SEND"/>
-    <Button android:id="@+id/btUpdate" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="UPDATE"/>
     <TextView android:id="@+id/tvResponse" android:text="Response" android:textSize="40dp" android:layout_width="match_parent" android:layout_height="wrap_content"/>
 
 </LinearLayout>

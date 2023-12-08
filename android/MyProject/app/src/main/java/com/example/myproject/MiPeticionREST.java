@@ -76,7 +76,7 @@ public class MiPeticionREST extends AsyncTask<String,String,String> {
                 int status = conn.getResponseCode();
 
                 if ( status == 200 ) {
-                    res = "Message Send as  BOT";
+                    res = "Información enviada a Telegram";
                 }
 
                 conn.disconnect();
