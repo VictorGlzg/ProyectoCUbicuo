@@ -18,7 +18,7 @@ import java.net.URL;
 
 public class MyWebService extends Service {
     private static final String TAG = "MyWebService";
-    private static final String URL_SERVIDOR = "http://a1ef-187-254-100-32.ngrok-free.app/android";
+    private static final String URL_SERVIDOR = "http://74f6-187-254-100-32.ngrok-free.app/android";
     private static final int INTERVALO_CONEXION = 60000; // Intervalo en milisegundos (1 minuto)
     private boolean conectado = false;
     private ConnectionTask connectionTask;
@@ -113,7 +113,7 @@ public class MyWebService extends Service {
             // Procesar el resultado de la conexión aquí
             if (result != null) {
                 if (result != null) {
-                    Log.d(TAG, "Respuesta del servidor: " + result);
+                    Log.d("Servidor", "Respuesta del servidor: " + result);
                     // Convierte el JSON a una cadena (String)
                     //String jsonString = convertirJSONaString(result);
                     //result = jsonString;
@@ -127,11 +127,6 @@ public class MyWebService extends Service {
                     // Si result es nulo, asigna el texto "procesando" al EditText
                     enviarBroadcast("procesando");
                 }
-
-                // Aquí puedes llamar a un método para enviar los datos a la API de Telegram
-                //TelegramTask telegramTask = new TelegramTask();
-                //telegramTask.execute(result);
-
                 // Envía el resultado a MainActivity
                 enviarBroadcast(result);
             }
