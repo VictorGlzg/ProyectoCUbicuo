@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="105dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btnBluetooth"
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:onClick="onClick" />
+
+        <Button
+            android:id="@+id/btnBuscarDispositivo"
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:enabled="true"
+            android:onClick="onClick"
+            android:text="Buscar Dispositivos" />
+
+        <ListView
+            android:id="@+id/lvDispositivos"
+            android:layout_width="match_parent"
+            android:layout_height="294dp"></ListView>
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="148dp"
+        android:layout_weight="0.2"
+        android:orientation="horizontal">
+
+
+        <Button
+            android:id="@+id/btnEncender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="80dp"
+            android:text="Encender" />
+
+        <Button
+            android:id="@+id/btnApagar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="50dp"
+            android:layout_marginLeft="20px"
+            android:text="Apagar" />
+
+    </LinearLayout>
+
+
+</LinearLayout>
